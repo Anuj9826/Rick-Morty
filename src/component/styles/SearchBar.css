@@ -13,21 +13,6 @@
     max-width: 300px;
 }
 
-.search-bar button {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-left: none;
-    background-color: #0a74da;
-    color: white;
-    cursor: pointer;
-    border-radius: 0 4px 4px 0;
-    margin-left: 10px; /* Remove the gap between input and button */
-}
-
-.search-bar button:hover {
-    background-color: #005bb5;
-}
-
 @media (max-width: 600px) {
     .search-bar {
         flex-direction: column;

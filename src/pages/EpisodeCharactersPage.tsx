@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import CharacterCard from '../component/CharacterCard';
 import '../component/styles/CharacterGrid.css';
+import { debounce } from 'lodash';
 
 const EpisodeCharactersPage: React.FC = () => {
   const episode = useLocation();
-  const characters = episode.state?.characters || [];
+
+  // Memoize the calculation of 'characters'
+  const characters = useMemo(() => episode.state?.characters || [], [episode.state]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredCharacters, setFilteredCharacters] = useState(characters);
   const charactersPerPage = 20;
 
-  const handleSearch = () => {
-    const filtered = characters.filter((character: any) =>
-      character.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCharacters(filtered);
-    setCurrentPage(1);
+  useEffect(() => {
+    const handleSearch = debounce((term: string) => {
+      const filtered = characters.filter((character: any) =>
+        character.name.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredCharacters(filtered);
+      setCurrentPage(1);
+    }, 300);
+
+    handleSearch(searchTerm);
+  }, [searchTerm, characters]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   // Get current characters based on pagination
@@ -32,8 +43,9 @@ const EpisodeCharactersPage: React.FC = () => {
     <div>
       <h2 style={{ textAlign: 'center', marginBottom: '20px' }}> Characters from Episode </h2>
       <div className="search-bar">
-        <input type="text" placeholder="Search Character By Name" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        <button onClick={handleSearch}>Search</button>
+        <input type="text" placeholder="Search Character By Name" value={searchTerm}
+          onChange={handleInputChange}
+        />
       </div>
       {currentCharacters.length > 0 ? (
         <div className='grid'>

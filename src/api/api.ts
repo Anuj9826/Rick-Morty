@@ -31,7 +31,9 @@ const API_URL = 'https://rickandmortyapi.com/api/';
 
 export const getCharacters = async (page: number, searchQuery: string, filters: { [key: string]: any }) => {
   let url = `${API_URL}character?page=${page}`;
-  if (searchQuery) url += `&name=${searchQuery}`;
+  if (searchQuery) {
+    url = `${API_URL}character?name=${searchQuery}&page=${page}`
+  };  
   if (filters.status) url += `&status=${filters.status}`;
   if (filters.gender) url += `&gender=${filters.gender}`;
   if (filters.species) url += `&species=${filters.species}`;
@@ -69,8 +71,10 @@ export const getCharacterById = async (id: number) => {
 };
 
 export const getLocations = async (page: number, searchQuery: string) => {
-  let url = `${API_URL}location/?page=${page}`;
-  if (searchQuery) url += `&name=${searchQuery}`;
+  let url = `${API_URL}location?page=${page}`;
+  if (searchQuery) {
+    url = `${API_URL}location?name=${searchQuery}&page=${page}`
+  }
   return await axios.get(url);
 };
 
@@ -93,8 +97,10 @@ export const getDataByUrl = async (apiUrl: string[]): Promise<ApiResponse[]> => 
 };
 
 export const getEpisodes = async (page: number, searchQuery: string) => {
-  let url = `${API_URL}episode/?page=${page}`;
-  if (searchQuery) url += `&name=${searchQuery}`;
+  let url = `${API_URL}episode?page=${page}`;
+  if (searchQuery) {
+    url = `${API_URL}episode?name=${searchQuery}&page=${page}`
+  }
   return await axios.get(url);
 };
 
